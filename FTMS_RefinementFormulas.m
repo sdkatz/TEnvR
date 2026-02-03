@@ -47,6 +47,8 @@ if str(1)=='O'          % Loads and reformats the file from FTMS_FormulaAssignme
     Data_Stage1=readtable(filename,'VariableNamingRule','preserve');
     fclose(fid);
     Data_Stage1=table2array(Data_Stage1);
+    Index = zeros(size(Data_Stage1, 1), 1);
+    Previous_Index = 0;
     for i=1:size(Data_Stage1,1)
         if i == 1
             Index(i)=1;
