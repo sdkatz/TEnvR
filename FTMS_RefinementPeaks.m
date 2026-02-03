@@ -105,28 +105,20 @@ for i = 1 : size(SampleMZ,1)
 end
 
 %% Stage 3: Identify inorganic (salt) peaks:
+Massdef = SampleMZ - fix(SampleMZ);
 
-PeaksSalt = zeros(size(SampleMZ,1), 2);
-for i = 1 : size(SampleMZ,1)
-    Massdef(i)=SampleMZ(i)-fix(SampleMZ(i)); % Calculate mass defect
-    if SampleMZ(i) < 300 && Massdef(i) >= 0.4 && Massdef(i)<=0.97
-       PeaksSalt(i, 1) = SampleMZ(i);
-       PeaksSalt(i, 2) = SampleInt(i);
-       PeaksSalt(i, 3) = SampleSN(i);
-    elseif SampleMZ(i)>= 300 && SampleMZ(i)<=500 && Massdef(i)>=0.5 && Massdef(i)<=0.96
-       PeaksSalt(i, 1) = SampleMZ(i);
-       PeaksSalt(i, 2) = SampleInt(i);
-       PeaksSalt(i, 3) = SampleSN(i);
-   elseif SampleMZ(i)>= 500 && SampleMZ(i)<=800 && Massdef(i)>=0.6 && Massdef(i)<=0.95
-       PeaksSalt(i, 1) = SampleMZ(i);
-       PeaksSalt(i, 2) = SampleInt(i);
-       PeaksSalt(i, 3) = SampleSN(i);
-    elseif SampleMZ(i) > 800  && Massdef(i)>=0.7 && Massdef(i)<=0.94
-       PeaksSalt(i, 1) = SampleMZ(i);
-       PeaksSalt(i, 2) = SampleInt(i);
-       PeaksSalt(i, 3) = SampleSN(i);
-    end
-end
+PeaksSalt = zeros(size(SampleMZ,1), 3);
+
+mask1 = (SampleMZ < 300) & (Massdef >= 0.4) & (Massdef <= 0.97);
+mask2 = (SampleMZ >= 300) & (SampleMZ <= 500) & (Massdef >= 0.5) & (Massdef <= 0.96);
+mask3 = (SampleMZ >= 500) & (SampleMZ <= 800) & (Massdef >= 0.6) & (Massdef <= 0.95);
+mask4 = (SampleMZ > 800) & (Massdef >= 0.7) & (Massdef <= 0.94);
+
+saltMask = mask1 | mask2 | mask3 | mask4;
+
+PeaksSalt(saltMask, 1) = SampleMZ(saltMask);
+PeaksSalt(saltMask, 2) = SampleInt(saltMask);
+PeaksSalt(saltMask, 3) = SampleSN(saltMask);
 
 %% Stage 4: Identify 13C isotopologues
 
@@ -301,14 +293,14 @@ writetable(DataTable, [filename(1:end-4) '_Refinement.xlsx'], 'Sheet', 1);
 % Remove blank, salt, doubly-charged, and isotopoluges peaks. 
 % In the exported file, it will contain m/z, intensity, estimated C number, and S/N.
 
-DataRefined = DataAll(DataAll(:,4) == 0,[1:31]);          % Removing Blank Peaks (Column 4) 
-DataRefined = DataRefined(DataRefined(:,5) == 0,[1:31]);  % Removing Salt Peaks (Column 5) 
-DataRefined = DataRefined(DataRefined(:,6) == 0,[1:31]);  % Removing Doubly Charged Peaks (Column 6) 
-DataRefined = DataRefined(DataRefined(:,7) == 0,[1:31]);  % Removing 13C Peaks (Column 7) 
-DataRefined = DataRefined(DataRefined(:,12) == 0,[1:31]); % Removing 34S Peaks (Column 12) 
-DataRefined = DataRefined(DataRefined(:,17) == 0,[1:31]); % Removing 54Fe Peaks (Column 17) 
-DataRefined = DataRefined(DataRefined(:,22) == 0,[1:31]); % Removing 37Cl Peaks (Column 22) 
-DataRefined = DataRefined(DataRefined(:,27) == 0,[1:31]); % Removing 200Hg Peaks (Column 27) 
+DataRefined = DataAll(DataAll(:,4) == 0,1:31);          % Removing Blank Peaks (Column 4) 
+DataRefined = DataRefined(DataRefined(:,5) == 0,1:31);  % Removing Salt Peaks (Column 5) 
+DataRefined = DataRefined(DataRefined(:,6) == 0,1:31);  % Removing Doubly Charged Peaks (Column 6) 
+DataRefined = DataRefined(DataRefined(:,7) == 0,1:31);  % Removing 13C Peaks (Column 7) 
+DataRefined = DataRefined(DataRefined(:,12) == 0,1:31); % Removing 34S Peaks (Column 12) 
+DataRefined = DataRefined(DataRefined(:,17) == 0,1:31); % Removing 54Fe Peaks (Column 17) 
+DataRefined = DataRefined(DataRefined(:,22) == 0,1:31); % Removing 37Cl Peaks (Column 22) 
+DataRefined = DataRefined(DataRefined(:,27) == 0,1:31); % Removing 200Hg Peaks (Column 27) 
 
 
 DataRefined_trimed=[DataRefined(:,1), DataRefined(:,2), DataRefined(:,3),DataRefined(:,8)];
