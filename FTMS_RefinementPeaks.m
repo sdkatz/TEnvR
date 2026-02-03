@@ -372,17 +372,18 @@ Stats=[Stats_Num_AllPeaks,100,100;...
     Stats_Num_200HgPeaks,round((Stats_Num_200HgPeaks*100/Stats_Num_AllPeaks),2),round((Stats_Int_200HgPeaks*100/Stats_Int_AllPeaks),2);...
     Stats_Num_BadPeaks,round((Stats_Num_BadPeaks*100/Stats_Num_AllPeaks),2),round((Stats_Int_BadPeaks*100/Stats_Int_AllPeaks),2);...
     Stats_Num_RefinedPeaks,round((Stats_Num_RefinedPeaks*100/Stats_Num_AllPeaks),2),round((Stats_Int_RefinedPeaks*100/Stats_Int_AllPeaks),2)];
-Stats=string(Stats);  
 
-xlswrite([filename(1:end-4) '_Refinement.xlsx'], Stats_TitlesColumns, 1, 'AG2');
-xlswrite([filename(1:end-4) '_Refinement.xlsx'], Stats_TitlesRows, 1, 'AG3');
-xlswrite([filename(1:end-4) '_Refinement.xlsx'], Stats, 1, 'AH3');
-xlswrite([filename(1:end-4) '_Refinement.xlsx'], Stats_note, 1, 'AL12');
+
+outputFile = [filename(1:end-4) '_Refinement.xlsx'];
+writecell(Stats_TitlesColumns, outputFile, 'Sheet', 1, 'Range', 'AG2');
+writecell(Stats_TitlesRows, outputFile, 'Sheet', 1, 'Range', 'AG3');
+writematrix(Stats, outputFile, 'Sheet', 1, 'Range', 'AH3');
+writecell(Stats_note, outputFile, 'Sheet', 1, 'Range', 'AL12');
 
 if nargout == 1
     varargout{1}=[filename(1:end-4);Stats(:,1)];
 else
-    ;
+    
 end
 disp(['Finished refining the peak list ' char(filename) ' (' num2str(toc) ' seconds)'])
 end
