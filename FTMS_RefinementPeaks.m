@@ -54,7 +54,7 @@ end
 if size_dataSample_raw(1,2) == 2
     dataSample_raw=[dataSample_raw,zeros(size_dataSample_raw(1,1),1)];
 elseif size_dataSample_raw(1,2) == 3
-    ;
+    
 else
     dataSample_raw=dataSample_raw(:,1:3);
     disp('Warning! Columns 4 and beyond of the loaded mass list will not be imported!')
@@ -63,7 +63,7 @@ end
 if size_dataBlank_raw(1,2) == 2
     dataBlank_raw=[dataBlank_raw,zeros(size_dataBlank_raw(1,1),1)];
 elseif size_dataSample_raw(1,2) == 3
-    ;
+    
 else
     dataBlank_raw=dataBlank_raw(:,1:3);
     disp('Warning! Columns 4 and beyond of the loaded mass list will not be imported!')
@@ -295,8 +295,8 @@ end
 warning('off','MATLAB:xlswrite:AddSheet')
 DataAll = [dataSample, PeaksBlank(:,1), PeaksSalt(:,1), PeaksDoublyCharged(:,1), iso13C, iso34S, iso54Fe, iso37Cl, iso200Hg];
 Titles={'m/z', 'Magnitude', 'S/N', 'Blank', 'Salt','Doubly Charged', '13C','Estim C#','13C m/z','13C Int','difC13','34S','Estim S#','34S m/z','34S Int','difS34','54Fe','Estim Fe#','54Fe m/z','54Fe Int','difFe','37Cl','Estim Cl#','37Cl m/z','37Cl Int','difCl','200Hg','Estim Hg#','200Hg m/z','200Hg Int','difHg'};
-xlswrite([filename(1:end-4) '_Refinement.xlsx'], Titles, 1, 'A1');
-xlswrite([filename(1:end-4) '_Refinement.xlsx'], DataAll, 1, 'A2');
+DataTable = array2table(DataAll, 'VariableNames', Titles);
+writetable(DataTable, [filename(1:end-4) '_Refinement.xlsx'], 'Sheet', 1);
 
 % Remove blank, salt, doubly-charged, and isotopoluges peaks. 
 % In the exported file, it will contain m/z, intensity, estimated C number, and S/N.
