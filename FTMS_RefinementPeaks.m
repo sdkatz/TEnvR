@@ -327,8 +327,9 @@ fileID = fopen([filename(1:end-4) '_Refinement.txt'], 'w');
 fprintf(fileID,'%.10f %.6f\r\n', DataRefined_ExportTXT');
 fclose(fileID);
 
-xlswrite([filename(1:end-4) '_Refinement.xlsx'], DataRefined_Titles, 'DataRefined', 'A1');
-xlswrite([filename(1:end-4) '_Refinement.xlsx'], DataRefined_trimed, 'DataRefined', 'A2');
+DataRefined_TitlesClean = matlab.lang.makeValidName(DataRefined_Titles, 'ReplacementStyle', 'underscore');
+DataRefined_Table = array2table(DataRefined_trimed, 'VariableNames', DataRefined_TitlesClean);
+writetable(DataRefined_Table, [filename(1:end-4) '_Refinement.xlsx'], 'Sheet', 'DataRefined');
 
 %% Stage 9: Statistics
 
