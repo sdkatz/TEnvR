@@ -38,8 +38,8 @@ global Precision
 Precision=format.Precision;
 
 % Load data and sort it by ExactMass
-[Data,TXT,~]=xlsread(filename);
-Headers=TXT(1,:);
+Headers = readcell(filename, 'Range', '1:1');
+Data = readmatrix(filename, 'NumHeaderLines', 1);
 Data=sortrows(Data,format.Column_ExactMass); 
 
 Data(:,format.Column_ExactMass)=Data(:,format.Column_C)*format.Mass_12C+Data(:,format.Column_H)*format.Mass_1H+Data(:,format.Column_N)*format.Mass_14N+...
@@ -89,7 +89,7 @@ Products(:,format.Column_ExactMass)=round(Products(:,format.Column_ExactMass),Pr
 Common=intersect(Data(:,format.Column_ExactMass),Substrates(:,format.Column_ExactMass));
 [~,~,index1c]=intersect(Common,Data(:,format.Column_ExactMass)); % index is the location of the common formulas!
 
-index1u=[1:1:length(Data(:,format.Column_ExactMass))]'; index1u(index1c)=[];
+index1u=(1:1:length(Data(:,format.Column_ExactMass)))'; index1u(index1c)=[];
 Data1_trim=Data(index1u,:);
 
 % Common between data and products - remove common from Data
@@ -97,7 +97,7 @@ Data1_trim=Data(index1u,:);
 Common=intersect(Data1_trim(:,format.Column_ExactMass),Products(:,format.Column_ExactMass));
 [~,~,index1c]=intersect(Common,Data1_trim(:,format.Column_ExactMass)); % index is the location of the common formulas!
 
-index1u=[1:1:length(Data1_trim(:,format.Column_ExactMass))]'; index1u(index1c)=[];
+index1u=(1:1:length(Data1_trim(:,format.Column_ExactMass)))'; index1u(index1c)=[];
 Unique=Data1_trim(index1u,:);
 
 % Common between substrates and products - remove common from Data
@@ -105,7 +105,7 @@ Unique=Data1_trim(index1u,:);
 Common=intersect(Substrates(:,format.Column_ExactMass),Products(:,format.Column_ExactMass));
 [~,~,index1c]=intersect(Common,Substrates(:,format.Column_ExactMass)); % index is the location of the common formulas!
 
-index1u=[1:1:length(Substrates(:,format.Column_ExactMass))]'; index1u(index1c)=[];
+index1u=(1:1:length(Substrates(:,format.Column_ExactMass)))'; index1u(index1c)=[];
 Substrates=Substrates(index1u,:);
 
 %% Statistics
@@ -127,19 +127,19 @@ if PerUnique+PerSubstrate+PerProducts < 98
 end
 
 %% Export
-    warning('off','MATLAB:xlswrite:AddSheet')
+    output_filename = ['KMD_Oxidation_' char(filename(1:end-5)) '.xlsx'];
 
-    xlswrite(['KMD_Oxidation_'  char(filename(1:end-5)) '.xlsx'],Headers,'Sheet1','A1')
-    xlswrite(['KMD_Oxidation_'  char(filename(1:end-5)) '.xlsx'],Data,'Sheet1','A2')
+    writecell(Headers, output_filename, 'Sheet', 'Sheet1', 'Range', 'A1');
+    writematrix(Data, output_filename, 'Sheet', 'Sheet1', 'Range', 'A2');
 
-    xlswrite(['KMD_Oxidation_'  char(filename(1:end-5)) '.xlsx'],Headers,'Unique','A1')
-    xlswrite(['KMD_Oxidation_'  char(filename(1:end-5)) '.xlsx'],Unique,'Unique','A2')
+    writecell(Headers, output_filename, 'Sheet', 'Unique', 'Range', 'A1');
+    writematrix(Unique, output_filename, 'Sheet', 'Unique', 'Range', 'A2');
 
-    xlswrite(['KMD_Oxidation_'  char(filename(1:end-5)) '.xlsx'],Headers,'Substrates','A1')
-    xlswrite(['KMD_Oxidation_'  char(filename(1:end-5)) '.xlsx'],Substrates,'Substrates','A2')
+    writecell(Headers, output_filename, 'Sheet', 'Substrates', 'Range', 'A1');
+    writematrix(Substrates, output_filename, 'Sheet', 'Substrates', 'Range', 'A2');
 
-    xlswrite(['KMD_Oxidation_'  char(filename(1:end-5)) '.xlsx'],Headers,'Ox products','A1')
-    xlswrite(['KMD_Oxidation_'  char(filename(1:end-5)) '.xlsx'],Products,'Ox products','A2')
+    writecell(Headers, output_filename, 'Sheet', 'Ox products', 'Range', 'A1');
+    writematrix(Products, output_filename, 'Sheet', 'Ox products', 'Range', 'A2');
 
 %% Figures
 figurename=[char(filename(1:end-5)) '.png'];
