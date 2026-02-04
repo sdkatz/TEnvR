@@ -68,7 +68,6 @@ if str(1)=='O'          % Loads and reformats the file from FTMS_FormulaAssignme
             end
         end
     end
-Index=Index';    
 Data_Stage1=[Index,Data_Stage1(:,2),zeros(size(Data_Stage1,1),1)+config.MassAccuracy,Data_Stage1(:,3:14)];
 
 else % Loads and reformats the file from the Molecular Formula Calculator (obsolete)
@@ -102,6 +101,7 @@ Data_Stage1=sortrows(Data_Stage1,2); % Sort based on m/z, column 2
 
 % Import S/N and C-number data from the Refinement file
 RefinementData= readtable([filename(1:end-6) '.xlsx'], 'Sheet', 'DataRefined');        % Import
+RefinementData = table2array(RefinementData);
 RefinementQC= readmatrix([filename(1:end-6) '.xlsx'], 'Sheet', 'Sheet1', 'Range','AH3:AJ13');    % Import
 RefinementData=sortrows(RefinementData,1); % Sort based on m/z, column 1
 
@@ -111,7 +111,7 @@ while i <= size(RefinementData,1) && j <= size(Data_Stage1, 1)
     mz_BeforeAssignment = RefinementData(i, 1);
     mz_AfterAssignment = Data_Stage1(j, 2);
 
-    if intersect(mz_BeforeAssignment,mz_AfterAssignment) > 0
+    if mz_BeforeAssignment == mz_AfterAssignment
         Data_Stage1_Expanded(j,:)=[Data_Stage1(j,:),RefinementData(i,3:4)];
         j = j+1;
     elseif mz_BeforeAssignment < mz_AfterAssignment
@@ -133,7 +133,7 @@ writecell({'This is the initial formatting of the data, data hereafter will be f
 
 %% Stage 2: H-correction, Reformatting, and Initial Filtering using Elemental Constraints
 
-clearvars -except filename config RefinementData RefinementQC Data_Stage1_Expanded 
+clearvars -except filename config RefinementData RefinementQC Data_Stage1_Expanded output_filename
 
 Data_Stage1_Expanded=sortrows(Data_Stage1_Expanded,2);
 
@@ -282,7 +282,7 @@ end
 
 %% Stage 3: Formula Refinement using Isotopic Filter and selection of Unique Formulas
 
-clearvars -except filename config format titles RefinementData RefinementQC Data_Stage2_Refined 
+clearvars -except filename config format titles RefinementData RefinementQC Data_Stage2_Refined output_filename
 
 Data_Stage3 = sortrows(Data_Stage2_Refined, format.Column_mz);
 
@@ -362,7 +362,7 @@ end
 
 %% Stage 4: Formula refinement using KMD Filter
 
-clearvars -except filename config format titles RefinementData RefinementQC Data_Stage3 Data_Stage3_Refined    
+clearvars -except filename config format titles RefinementData RefinementQC Data_Stage3 Data_Stage3_Refined output_filename  
 
 Data_Stage4 = sortrows(Data_Stage3, format.Column_ExactMass);                 % All data
 Data_Stage4_Refined = sortrows(Data_Stage3_Refined, format.Column_ExactMass); % Formulas of high confidence
@@ -504,7 +504,7 @@ writematrix(FormatDataForExport(Data_Stage4_Refined),output_filename,'Sheet','Mi
 
 %% Stage 5: Formula refinement using Compositional Filter
 
-clearvars -except filename config format titles RefinementData RefinementQC Data_Stage4_Refined 
+clearvars -except filename config format titles RefinementData RefinementQC Data_Stage4_Refined output_filename
 
 Data_Stage5=sortrows(Data_Stage4_Refined,format.Column_Index); 
 
@@ -565,7 +565,7 @@ else
 end
 %% Stage 6: Formula refinement using Error Filter
 
-clearvars -except filename config format titles RefinementData RefinementQC Data_Stage5_Refined 
+clearvars -except filename config format titles RefinementData RefinementQC Data_Stage5_Refined output_filename
 
 Data_Stage6=sortrows(Data_Stage5_Refined,format.Column_Index); 
 
@@ -611,7 +611,7 @@ else
 end
 %% Stage 7: Final Refinement
 
-clearvars -except filename config format titles RefinementData RefinementQC Data_Stage6_Refined  
+clearvars -except filename config format titles RefinementData RefinementQC Data_Stage6_Refined output_filename
 
 Data_Stage7=sortrows(Data_Stage6_Refined,format.Column_Index);
 Data_Stage7_Refined1=[];
@@ -758,7 +758,7 @@ writecell(titles,[filename(1:end-17) '_Final.xlsx'],'Sheet','Sheet1','Range','A1
 writematrix(FormatDataForExport(Data_Stage7_Refined),output_filename,'Sheet','Sheet1','Range''A2');
     
 %% Stage 8: Quality Control
-clearvars -except filename config format titles RefinementData RefinementQC Data_Stage7_Refined Unassigned
+clearvars -except filename config format titles RefinementData RefinementQC Data_Stage7_Refined Unassigned output_filename
 
 figure 
 set(gcf,'color',[0.85 0.85 0.85]);
