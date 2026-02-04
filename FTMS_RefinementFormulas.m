@@ -265,19 +265,19 @@ titles={'m/z' 'Magnitude' 'S/N' 'Estim C#' 'Type' 'C' 'H' 'O' 'N' 'S' 'P' 'E' 'E
 
 % Export
 if ~isempty(Data_Stage2_Rejected) % There were some rejected
-    xlswrite([filename(1:end-6) '_Processing.xlsx'],titles,'Rejected using Elem.Constraints','A1');
-    xlswrite([filename(1:end-6) '_Processing.xlsx'],FormatDataForExport(Data_Stage2_Rejected),'Rejected using Elem.Constraints','A2');
-    xlswrite([filename(1:end-6) '_Processing.xlsx'],{'Formulas eliminated using the elemental constraints (Stubbins et al. 2010 and others). H is corrected!'},'Rejected using Elem.Constraints','U2');
+    writecell(titles, output_filename,'Rejected using Elem.Constraints','A1');
+    writemaxtrix(FormatDataForExport(Data_Stage2_Rejected),output_filename,'Sheet','Rejected using Elem.Constraints','Range','A2');
+    writecell({'Formulas eliminated using the elemental constraints (Stubbins et al. 2010 and others). H is corrected!'},output_filename,'Sheet','Rejected using Elem.Constraints','Range','U2');
     
-    xlswrite([filename(1:end-6) '_Processing.xlsx'],titles,'Refined using Elem.Constraints','A1');
-    xlswrite([filename(1:end-6) '_Processing.xlsx'],FormatDataForExport(Data_Stage2_Refined),'Refined using Elem.Constraints','A2');
-    xlswrite([filename(1:end-6) '_Processing.xlsx'],{'Data that fits the elemental constraints (Stubbins et al. 2010 and others), H is corrected, ready for further refienement!'},'Refined using Elem.Constraints','U2');
+    writecell(titles,output_filename,'Sheet','Refined using Elem.Constraints','Range','A1');
+    writematrix(FormatDataForExport(Data_Stage2_Refined),output_filename,'Sheet','Refined using Elem.Constraints','Range','A2');
+    writecell({'Data that fits the elemental constraints (Stubbins et al. 2010 and others), H is corrected, ready for further refienement!'},output_filename,'Sheet','Refined using Elem.Constraints','Range','U2');
 else % None were rejected - keep the original list
-    xlswrite([filename(1:end-6) '_Processing.xlsx'],{'No formulas were rejected using the elemental constraints (Stubbins et al. 2010 and others)'},'Rejected using Elem.Constraints','A1');
+    writecell({'No formulas were rejected using the elemental constraints (Stubbins et al. 2010 and others)'},output_filename,'Sheet','Rejected using Elem.Constraints','Range','A1');
     
-    xlswrite([filename(1:end-6) '_Processing.xlsx'],titles,'Refined using Elem.Constraints','A1');
-    xlswrite([filename(1:end-6) '_Processing.xlsx'],FormatDataForExport(Data_Stage2_Refined),'Refined using Elem.Constraints','A2');
-    xlswrite([filename(1:end-6) '_Processing.xlsx'],{'Data that fits the elemental constraints (Stubbins et al. 2010 and others), H is corrected, ready for further refienement!'},'Refined using Elem.Constraints','U2');
+    writecell(titles,output_filename,'Sheet','Refined using Elem.Constraints','Range','A1');
+    writematrix(FormatDataForExport(Data_Stage2_Refined),output_filename,'Sheet','Refined using Elem.Constraints','Range','A2');
+    writecell({'Data that fits the elemental constraints (Stubbins et al. 2010 and others), H is corrected, ready for further refienement!'},output_filename,'Sheet','Refined using Elem.Constraints','Range','U2');
 end
 
 %% Stage 3: Formula Refinement using Isotopic Filter and selection of Unique Formulas
