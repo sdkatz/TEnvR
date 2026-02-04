@@ -732,10 +732,10 @@ Data_Stage7_Refined=[Data_Stage7_Refined2;Data_Stage7_Refined3];
 Data_Stage7_Rejected=[Data_Stage7_Rejected1;Data_Stage7_Rejected2;Data_Stage7_Rejected3];
 
 if ~isempty(Data_Stage7_Rejected)
-    xlswrite([filename(1:end-6) '_Processing.xlsx'],titles,'Rejected w Final Refinement','A1');
-    xlswrite([filename(1:end-6) '_Processing.xlsx'],FormatDataForExport(Data_Stage7_Rejected),'Rejected w Final Refinement','A2');
+    writecell(titles,output_filename,'Sheet','Rejected w Final Refinement','Range','A1');
+    writematrix(FormatDataForExport(Data_Stage7_Rejected),output_filename,'Sheet','Rejected w Final Refinement','Range','A2');
 else
-    xlswrite([filename(1:end-6) '_Processing.xlsx'],{'No furter refinement was needed'},'Rejected w Final Refinement','A1');
+    writecell({'No furter refinement was needed'},output_filename,'Sheet','Rejected w Final Refinement','Range','A1');
 end
  
 % Identify formulas that were not assigned
@@ -745,17 +745,17 @@ index_u=[1:1:size(RefinementData(:,1),1)]'; index_u(index_c)=[];
 Unassigned=RefinementData(index_u,:);
 
 if ~isempty(Unassigned)
-    xlswrite([filename(1:end-6) '_Processing.xlsx'],{'m/z' 'Magnitude','S/N','Estim C#'},'Not Assigned','A1');
-    xlswrite([filename(1:end-6) '_Processing.xlsx'],Unassigned,'Not Assigned','A2');   
+    writecell({'m/z' 'Magnitude','S/N','Estim C#'},output_filename,'Sheet','Not Assigned','Range','A1');
+    writematrix(Unassigned,output_filename,'Sheet','Not Assigned','Range','A2');   
 else
-    xlswrite([filename(1:end-6) '_Processing.xlsx'],{'No formulas were not assignable (assignment = 100%)'},'Rejected w Final Refinement','A1');
+    writecell({'No formulas were not assignable (assignment = 100%)'},output_filename,'Sheet','Rejected w Final Refinement','Range','A1');
 end
 
-xlswrite([filename(1:end-6) '_Processing.xlsx'],titles,'Final Refinement','A1');
-xlswrite([filename(1:end-6) '_Processing.xlsx'],FormatDataForExport(Data_Stage7_Refined),'Final Refinement','A2');
+writecell(titles,output_filename,'Sheet','Final Refinement','Range','A1');
+writecell(FormatDataForExport(Data_Stage7_Refined),output_filename,'Sheet','Final Refinement','Range','A2');
 
-xlswrite([filename(1:end-17) '_Final.xlsx'],titles,'Sheet1','A1');
-xlswrite([filename(1:end-17) '_Final.xlsx'],FormatDataForExport(Data_Stage7_Refined),'Sheet1','A2');
+writecell(titles,[filename(1:end-17) '_Final.xlsx'],'Sheet','Sheet1','Range','A1');
+writematrix(FormatDataForExport(Data_Stage7_Refined),output_filename,'Sheet','Sheet1','Range''A2');
     
 %% Stage 8: Quality Control
 clearvars -except filename config format titles RefinementData RefinementQC Data_Stage7_Refined Unassigned
