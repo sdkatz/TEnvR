@@ -265,8 +265,8 @@ titles={'m/z' 'Magnitude' 'S/N' 'Estim C#' 'Type' 'C' 'H' 'O' 'N' 'S' 'P' 'E' 'E
 
 % Export
 if ~isempty(Data_Stage2_Rejected) % There were some rejected
-    writecell(titles, output_filename,'Rejected using Elem.Constraints','A1');
-    writemaxtrix(FormatDataForExport(Data_Stage2_Rejected),output_filename,'Sheet','Rejected using Elem.Constraints','Range','A2');
+    writecell(titles, output_filename,'Sheet','Rejected using Elem.Constraints','Range','A1');
+    writematrix(FormatDataForExport(Data_Stage2_Rejected),output_filename,'Sheet','Rejected using Elem.Constraints','Range','A2');
     writecell({'Formulas eliminated using the elemental constraints (Stubbins et al. 2010 and others). H is corrected!'},output_filename,'Sheet','Rejected using Elem.Constraints','Range','U2');
     
     writecell(titles,output_filename,'Sheet','Refined using Elem.Constraints','Range','A1');
