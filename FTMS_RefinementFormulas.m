@@ -403,10 +403,10 @@ if config.Filter_KMD
     
         % Export all formulas of high confidence (isotope and/or unique + KMD refined)
         if ~isempty(Data_Stage4_Refined)
-            xlswrite([filename(1:end-6) '_Processing.xlsx'],titles,'Refined w KMD','A1');
-            xlswrite([filename(1:end-6) '_Processing.xlsx'],FormatDataForExport(Data_Stage4_Refined),'Refined w KMD','A2');
+            writecell(titles,output_filename,'Sheet','Refined w KMD','Range','A1');
+            writematrix(FormatDataForExport(Data_Stage4_Refined),output_filename,'Sheet','Refined w KMD','Range','A2');
         else
-            xlswrite([filename(1:end-6) '_Processing.xlsx'],{'No formulas were refined with KMD'},'Refined w KMD','A1');
+            writecell({'No formulas were refined with KMD'},output_filename,'Sheet','Refined w KMD','Range','A1');
         end
     catch % If above algorithm doesn't work, use the old one (slower one)  
         last_final_count = 0;
@@ -454,10 +454,10 @@ if config.Filter_KMD
         
         %Export all formulas of high confidence (isotope and/or unique + KMD refined)
         if ~isempty(Data_Stage4_Refined)
-            xlswrite([filename(1:end-6) '_Processing.xlsx'],titles,'Refined w KMD','A1');
-            xlswrite([filename(1:end-6) '_Processing.xlsx'],FormatDataForExport(Data_Stage4_Refined),'Refined w KMD','A2');
+            writecell(titles,output_filename,'Sheet','Refined w KMD','Range','A1');
+            writematrix(FormatDataForExport(Data_Stage4_Refined),output_filename,'Sheet','Refined w KMD','Range','A2');
         else
-            xlswrite([filename(1:end-6) '_Processing.xlsx'],{'No formulas were refined with KMD'},'Refined w KMD','A1');
+            writecell({'No formulas were refined with KMD'},output_filename,'Sheet','Refined w KMD','Range','A1');
         end        
     end
 else
@@ -492,15 +492,15 @@ end
 Data_Stage4_Rejected = Data_Stage4_Refinable(setdiff(1:size(Data_Stage4_Refinable,1),idx),:);
 
 if ~isempty(Data_Stage4_Rejected)
-    xlswrite([filename(1:end-6) '_Processing.xlsx'],titles,'Rejected at Middle Stage','A1');
-    xlswrite([filename(1:end-6) '_Processing.xlsx'],FormatDataForExport(Data_Stage4_Rejected),'Rejected at Middle Stage','A2');
+    writecell(titles,output_filename,'Sheet','Rejected at Middle Stage','Range','A1');
+    writematrix(FormatDataForExport(Data_Stage4_Rejected),'Sheet','Rejected at Middle Stage','Range','A2');
 else
-    xlswrite([filename(1:end-6) '_Processing.xlsx'],{'No formulas were rejected with the isotope filter and/or KMD'},'Rejected at Middle Stage','A1');
+    writecell({'No formulas were rejected with the isotope filter and/or KMD'},output_filename,'Sheet','Rejected at Middle Stage','Range','A1');
 end
 
 
-xlswrite([filename(1:end-6) '_Processing.xlsx'],titles, 'Middle Stage','A1');
-xlswrite([filename(1:end-6) '_Processing.xlsx'],FormatDataForExport(Data_Stage4_Refined), 'Middle Stage','A2');
+writecell(titles,output_filename,'Sheet','Middle Stage','Range','A1');
+writematrix(FormatDataForExport(Data_Stage4_Refined),output_filename,'Sheet','Middle Stage','Range','A2');
 
 %% Stage 5: Formula refinement using Compositional Filter
 
