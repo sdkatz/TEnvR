@@ -554,11 +554,11 @@ if config.Filter_Composition
     Data_Stage5_Refined = Data_Stage5(indices,:);
 
     if ~isempty(Data_Stage5_Rejected)
-        xlswrite([filename(1:end-6) '_Processing.xlsx'],titles,'Rejected w Compositional Filter','A1');
-        xlswrite([filename(1:end-6) '_Processing.xlsx'],FormatDataForExport(Data_Stage5_Rejected),'Rejected w Compositional Filter','A2');
+        writecell(titles,output_filename,'Sheet','Rejected w Compositional Filter','Range','A1');
+        writematrix(FormatDataForExport(Data_Stage5_Rejected),output_filename,'Sheet','Rejected w Compositional Filter','Range','A2');
 
-        xlswrite([filename(1:end-6) '_Processing.xlsx'],titles,'Refined w Compositional Filter','A1');
-        xlswrite([filename(1:end-6) '_Processing.xlsx'],FormatDataForExport(Data_Stage5_Refined),'Refined w Compositional Filter','A2');      
+        writecell(titles,output_filename,'Sheet','Refined w Compositional Filter','Range','A1');
+        writematrix(FormatDataForExport(Data_Stage5_Refined),output_filename,'Sheet','Refined w Compositional Filter','Range','A2');      
     end
 else
     Data_Stage5_Refined=Data_Stage5; % If composition filter is disabled, this transfers the original data into the next stage
