@@ -37,8 +37,8 @@ close all
 format=FTMS_ConfigurationToolbox;
 
 % Load data 
-[Data1,~] = xlsread(filename1); 
-Data2 = xlsread(filename2); 
+Data1 = readmatrix(filename1);
+Data2 = readmatrix(filename2);
 
 Data1(:,format.Column_ExactMass)=Data1(:,format.Column_C)*format.Mass_12C+Data1(:,format.Column_H)*format.Mass_1H+Data1(:,format.Column_N)*format.Mass_14N+...
     Data1(:,format.Column_O)*format.Mass_16O+Data1(:,format.Column_S)*format.Mass_32S+Data1(:,format.Column_P)*format.Mass_31P+Data1(:,format.Column_E)*format.Mass_Heteroelement;
@@ -69,8 +69,8 @@ Common1=Data1(index1common,:);
 Common2=Data2(index2common,:);
 
 % Identify Unique
-index1unique=[1:1:size(Data1(:,format.Column_ExactMass),1)]'; index1unique(index1common)=[];
-index2unique=[1:1:size(Data2(:,format.Column_ExactMass),1)]'; index2unique(index2common)=[];
+index1unique=(1:1:size(Data1(:,format.Column_ExactMass),1))'; index1unique(index1common)=[];
+index2unique=(1:1:size(Data2(:,format.Column_ExactMass),1))'; index2unique(index2common)=[];
 
 % Extract unique formulas
 Unique1=Data1(index1unique,:);
