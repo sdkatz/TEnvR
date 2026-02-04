@@ -34,8 +34,8 @@ close all
 format=FTMS_ConfigurationToolbox;
 
 % Load data and sort it by ExactMass
-[Data,TXT,~]=xlsread(filename);
-Headers=TXT(1,:);
+Headers = readcell(filename, 'Range', '1:1');
+Data = readmatrix(filename, 'NumHeaderLines', 1);
 Data=sortrows(Data,format.Column_ExactMass); 
 
 Data(:,format.Column_ExactMass)=Data(:,format.Column_C)*format.Mass_12C+Data(:,format.Column_H)*format.Mass_1H+Data(:,format.Column_N)*format.Mass_14N+...
@@ -147,19 +147,19 @@ if PerUnique+PerSubstrate+PerProducts < 98
 end
 
 %% Export
-    warning('off','MATLAB:xlswrite:AddSheet')
+    output_filename = ['KMD_' KMD_type '_' char(filename(1:end-5)) '.xlsx'];
 
-    xlswrite(['KMD_' KMD_type '_' char(filename(1:end-5)) '.xlsx'],Headers,'Sheet1','A1')
-    xlswrite(['KMD_' KMD_type '_' char(filename(1:end-5)) '.xlsx'],Data,'Sheet1','A2')
-
-    xlswrite(['KMD_' KMD_type '_' char(filename(1:end-5)) '.xlsx'],[Headers 'KNM' 'KMD'],'Unique','A1')
-    xlswrite(['KMD_' KMD_type '_' char(filename(1:end-5)) '.xlsx'],Data_Unique,'Unique','A2')
-
-    xlswrite(['KMD_' KMD_type '_' char(filename(1:end-5)) '.xlsx'],[Headers 'KNM' 'KMD'],'Apo','A1')
-    xlswrite(['KMD_' KMD_type '_' char(filename(1:end-5)) '.xlsx'],Data_Substrates,'Apo','A2')
-
-    xlswrite(['KMD_' KMD_type '_' char(filename(1:end-5)) '.xlsx'],[Headers 'KNM' 'KMD'],'Sequential','A1')
-    xlswrite(['KMD_' KMD_type '_' char(filename(1:end-5)) '.xlsx'],Data_Products,'Sequential','A2')
+    writecell(Headers, output_filename, 'Sheet', 'Sheet1', 'Range', 'A1');
+    writematrix(Data, output_filename, 'Sheet', 'Sheet1', 'Range', 'A2');
+    
+    writecell([Headers, 'KNM', 'KMD'], output_filename, 'Sheet', 'Unique', 'Range', 'A1');
+    writematrix(Data_Unique, output_filename, 'Sheet', 'Unique', 'Range', 'A2');
+    
+    writecell([Headers, 'KNM', 'KMD'], output_filename, 'Sheet', 'Apo', 'Range', 'A1');
+    writematrix(Data_Substrates, output_filename, 'Sheet', 'Apo', 'Range', 'A2');
+    
+    writecell([Headers, 'KNM', 'KMD'], output_filename, 'Sheet', 'Sequential', 'Range', 'A1');
+    writematrix(Data_Products, output_filename, 'Sheet', 'Sequential', 'Range', 'A2');
 
 %% Figures
 
