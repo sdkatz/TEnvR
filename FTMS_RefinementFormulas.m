@@ -403,10 +403,10 @@ if config.Filter_KMD
     
         % Export all formulas of high confidence (isotope and/or unique + KMD refined)
         if ~isempty(Data_Stage4_Refined)
-            xlswrite([filename(1:end-6) '_Processing.xlsx'],titles,'Refined w KMD','A1');
-            xlswrite([filename(1:end-6) '_Processing.xlsx'],FormatDataForExport(Data_Stage4_Refined),'Refined w KMD','A2');
+            writecell(titles,output_filename,'Sheet','Refined w KMD','Range','A1');
+            writematrix(FormatDataForExport(Data_Stage4_Refined),output_filename,'Sheet','Refined w KMD','Range','A2');
         else
-            xlswrite([filename(1:end-6) '_Processing.xlsx'],{'No formulas were refined with KMD'},'Refined w KMD','A1');
+            writecell({'No formulas were refined with KMD'},output_filename,'Sheet','Refined w KMD','Range','A1');
         end
     catch % If above algorithm doesn't work, use the old one (slower one)  
         last_final_count = 0;
