@@ -101,8 +101,8 @@ end
 Data_Stage1=sortrows(Data_Stage1,2); % Sort based on m/z, column 2
 
 % Import S/N and C-number data from the Refinement file
-RefinementData= xlsread([filename(1:end-6) '.xlsx'], 'DataRefined');        % Import
-RefinementQC= xlsread([filename(1:end-6) '.xlsx'], 'Sheet1','AH3:AJ13');    % Import
+RefinementData= readtable([filename(1:end-6) '.xlsx'], 'Sheet', 'DataRefined');        % Import
+RefinementQC= readmatrix([filename(1:end-6) '.xlsx'], 'Sheet', 'Sheet1', 'Range','AH3:AJ13');    % Import
 RefinementData=sortrows(RefinementData,1); % Sort based on m/z, column 1
 
 % Align S/N and C-number data from the Refinement file into the formulas file
@@ -122,14 +122,14 @@ while i <= size(RefinementData,1) && j <= size(Data_Stage1, 1)
 end
 
 % Export
-warning('off','MATLAB:xlswrite:AddSheet');
-xlswrite([filename(1:end-6) '_Processing.xlsx'],{'Index' 'm/z' 'Mass Accuracy (ppm)' 'Magnitude' 'C' 'Hion' 'N' 'O' 'S' 'P' 'E' 'K' 'Na' 'm/z corr' 'Assignment Error (ppm)','S/N','Estim C#'},'Sheet1','A1');
-xlswrite([filename(1:end-6) '_Processing.xlsx'],Data_Stage1_Expanded,'Sheet1','A2');
+output_filename = [filename(1:end-6) '_Processing.xlsx'];
+writecell({'Index', 'm/z', 'Mass Accuracy (ppm)', 'Magnitude', 'C', 'Hion', 'N', 'O', 'S', 'P', 'E', 'K', 'Na', 'm/z corr', 'Assignment Error (ppm)', 'S/N', 'Estim C#'}, output_filename, 'Sheet', 'Sheet1', 'Range', 'A1');
+writematrix(Data_Stage1_Expanded, output_filename, 'Sheet', 'Sheet1', 'Range', 'A2');
 
-xlswrite([filename(1:end-6) '_Processing.xlsx'],{'A-O is the reformatted output from the Formula Assignment (either MFC or MATLAB)'},'Sheet1','S2');
-xlswrite([filename(1:end-6) '_Processing.xlsx'],{'P-Q is data from the _Refinement.xlsx file!'},'Sheet1','S3');
-xlswrite([filename(1:end-6) '_Processing.xlsx'],{'Hion is number of H atoms in the singly charged ion!'},'Sheet1','S4');
-xlswrite([filename(1:end-6) '_Processing.xlsx'],{'This is the initial formatting of the data, data hereafter will be formatted differently!'},'Sheet1','S5');
+writecell({'A-O is the reformatted output from the Formula Assignment (either MFC or MATLAB)'}, output_filename, 'Sheet', 'Sheet1', 'Range', 'S2');
+writecell({'P-Q is data from the _Refinement.xlsx file!'}, output_filename, 'Sheet', 'Sheet1', 'Range', 'S3');
+writecell({'Hion is number of H atoms in the singly charged ion!'}, output_filename, 'Sheet', 'Sheet1', 'Range', 'S4');
+writecell({'This is the initial formatting of the data, data hereafter will be formatted differently!'}, output_filename, 'Sheet', 'Sheet1', 'Range', 'S5');
 
 %% Stage 2: H-correction, Reformatting, and Initial Filtering using Elemental Constraints
 
