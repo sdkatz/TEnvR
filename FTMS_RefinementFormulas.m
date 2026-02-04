@@ -600,12 +600,12 @@ if config.Filter_Error
     Data_Stage6_Refined = Data_Stage6(indices,:);
 
     if ~isempty(Data_Stage6_Rejected)
-        xlswrite([filename(1:end-6) '_Processing.xlsx'],titles,'Rejected w Error Filter','A1');
-        xlswrite([filename(1:end-6) '_Processing.xlsx'],FormatDataForExport(Data_Stage6_Rejected),'Rejected w Error Filter','A2');
+        writecell(titles,output_filename,'Sheet','Rejected w Error Filter','Range','A1');
+        writematrix(FormatDataForExport(Data_Stage6_Rejected),output_filename,'Sheet','Rejected w Error Filter','Range','A2');
     end
     
-    xlswrite([filename(1:end-6) '_Processing.xlsx'],titles,'Refined w Error Filter','A1');
-    xlswrite([filename(1:end-6) '_Processing.xlsx'],FormatDataForExport(Data_Stage6_Refined),'Refined w Error Filter','A2');
+    writecell(titles,output_filename,'Sheet','Refined w Error Filter','Range','A1');
+    writematrix(FormatDataForExport(Data_Stage6_Refined),output_filename,'Sheet','Refined w Error Filter','Range','A2');
 else
     Data_Stage6_Refined=Data_Stage6; % If the error filter is disabled, this transfers the original data into the next stage
 end
