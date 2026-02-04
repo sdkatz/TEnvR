@@ -455,7 +455,7 @@ if config.Filter_KMD
         %Export all formulas of high confidence (isotope and/or unique + KMD refined)
         if ~isempty(Data_Stage4_Refined)
             writecell(titles,output_filename,'Sheet','Refined w KMD','Range','A1');
-            writematrix(FormatDataForExport(Data_Stage4_Refined),output_filename,'Sheet','Refined w KMD','Range''A2');
+            writematrix(FormatDataForExport(Data_Stage4_Refined),output_filename,'Sheet','Refined w KMD','Range','A2');
         else
             writecell({'No formulas were refined with KMD'},output_filename,'Sheet','Refined w KMD','Range','A1');
         end        
@@ -723,7 +723,7 @@ if ~isempty(Data_Stage7_Refinable2)
             Data_Stage7_Rejected3=[Data_Stage7_Rejected3;Data_Stage7_Refinable2(r(1),:)];        
         
         else
-            ;
+            
         end
     end
 end
@@ -741,7 +741,7 @@ end
 % Identify formulas that were not assigned
 Assigned=intersect(RefinementData(:,1),Data_Stage7_Refined(:,format.Column_mz));
 [~,~,index_c]=intersect(Assigned,RefinementData(:,1));
-index_u=[1:1:size(RefinementData(:,1),1)]'; index_u(index_c)=[];
+index_u=(1:1:size(RefinementData(:,1),1))'; index_u(index_c)=[];
 Unassigned=RefinementData(index_u,:);
 
 if ~isempty(Unassigned)
@@ -752,7 +752,7 @@ else
 end
 
 writecell(titles,output_filename,'Sheet','Final Refinement','Range','A1');
-writecell(FormatDataForExport(Data_Stage7_Refined),output_filename,'Sheet','Final Refinement','Range','A2');
+writematrix(FormatDataForExport(Data_Stage7_Refined),output_filename,'Sheet','Final Refinement','Range','A2');
 
 writecell(titles,[filename(1:end-17) '_Final.xlsx'],'Sheet','Sheet1','Range','A1');
 writematrix(FormatDataForExport(Data_Stage7_Refined),output_filename,'Sheet','Sheet1','Range','A2');
