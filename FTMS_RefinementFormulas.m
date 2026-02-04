@@ -317,10 +317,10 @@ if config.Filter_Isotopes
     end
     
     if ~isempty(Data_Stage3_Isotopes)
-        xlswrite([filename(1:end-6) '_Processing.xlsx'],titles,'Isotopic Filter','A1');
-        xlswrite([filename(1:end-6) '_Processing.xlsx'],FormatDataForExport(Data_Stage3_Isotopes),'Isotopic Filter','A2');
+        writecell(titles,output_filename,'Sheet','Isotopic Filter','Range','A1');
+        writematrix(FormatDataForExport(Data_Stage3_Isotopes),output_filename,'Sheet','Isotopic Filter','Range','A2');
     else
-        xlswrite([filename(1:end-6) '_Processing.xlsx'],{'No formulas were refined with the isotopic filter'},'Isotopic Filter','A1');
+        writecell({'No formulas were refined with the isotopic filter'},output_filename,'Sheet','Isotopic Filter','Range','A1');
     end
 end
 
@@ -345,10 +345,10 @@ if ~config.Filter_Unique && ~config.Filter_Isotopes
 end
 
 if ~isempty(Data_Stage3_Unique)
-    xlswrite([filename(1:end-6) '_Processing.xlsx'],titles,'Unique','A1');
-    xlswrite([filename(1:end-6) '_Processing.xlsx'],FormatDataForExport(Data_Stage3_Unique),'Unique','A2');
+    writecell(titles,output_filename,'Sheet','Unique','Range','A1');
+    writematrix(FormatDataForExport(Data_Stage3_Unique),output_filename,'Sheet','Unique','Range','A2');
 else
-    xlswrite([filename(1:end-6) '_Processing.xlsx'],{'No unique formulas found'},'Unique','A1');
+    writecell({'No unique formulas found'},output_filename,'Sheet','Unique','Range','A1');
 end
 
 if isempty(Data_Stage3_Isotopes) && isempty(Data_Stage3_Unique)
