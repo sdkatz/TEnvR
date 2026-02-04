@@ -403,10 +403,10 @@ if config.Filter_KMD
     
         % Export all formulas of high confidence (isotope and/or unique + KMD refined)
         if ~isempty(Data_Stage4_Refined)
-            writecell(titles,output_filename,'Sheet','Refined w KMD','Range','A1');
-            writematrix(FormatDataForExport(Data_Stage4_Refined),output_filename,'Sheet','Refined w KMD','Range','A2');
+            xlswrite([filename(1:end-6) '_Processing.xlsx'],titles,'Refined w KMD','A1');
+            xlswrite([filename(1:end-6) '_Processing.xlsx'],FormatDataForExport(Data_Stage4_Refined),'Refined w KMD','A2');
         else
-            writecell({'No formulas were refined with KMD'},output_filename,'Sheet','Refined w KMD','Range','A1');
+            xlswrite([filename(1:end-6) '_Processing.xlsx'],{'No formulas were refined with KMD'},'Refined w KMD','A1');
         end
     catch % If above algorithm doesn't work, use the old one (slower one)  
         last_final_count = 0;
@@ -455,7 +455,7 @@ if config.Filter_KMD
         %Export all formulas of high confidence (isotope and/or unique + KMD refined)
         if ~isempty(Data_Stage4_Refined)
             writecell(titles,output_filename,'Sheet','Refined w KMD','Range','A1');
-            writematrix(FormatDataForExport(Data_Stage4_Refined),output_filename,'Sheet','Refined w KMD','Range','A2');
+            writematrix(FormatDataForExport(Data_Stage4_Refined),output_filename,'Sheet','Refined w KMD','Range''A2');
         else
             writecell({'No formulas were refined with KMD'},output_filename,'Sheet','Refined w KMD','Range','A1');
         end        
@@ -755,7 +755,7 @@ writecell(titles,output_filename,'Sheet','Final Refinement','Range','A1');
 writecell(FormatDataForExport(Data_Stage7_Refined),output_filename,'Sheet','Final Refinement','Range','A2');
 
 writecell(titles,[filename(1:end-17) '_Final.xlsx'],'Sheet','Sheet1','Range','A1');
-writematrix(FormatDataForExport(Data_Stage7_Refined),output_filename,'Sheet','Sheet1','Range''A2');
+writematrix(FormatDataForExport(Data_Stage7_Refined),output_filename,'Sheet','Sheet1','Range','A2');
     
 %% Stage 8: Quality Control
 clearvars -except filename config format titles RefinementData RefinementQC Data_Stage7_Refined Unassigned output_filename
