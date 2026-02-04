@@ -111,7 +111,7 @@ while i <= size(RefinementData,1) && j <= size(Data_Stage1, 1)
     mz_BeforeAssignment = RefinementData(i, 1);
     mz_AfterAssignment = Data_Stage1(j, 2);
 
-    if mz_BeforeAssignment == mz_AfterAssignment
+    if intersect(mz_BeforeAssignment,mz_AfterAssignment) > 0
         Data_Stage1_Expanded(j,:)=[Data_Stage1(j,:),RefinementData(i,3:4)];
         j = j+1;
     elseif mz_BeforeAssignment < mz_AfterAssignment
@@ -493,7 +493,7 @@ Data_Stage4_Rejected = Data_Stage4_Refinable(setdiff(1:size(Data_Stage4_Refinabl
 
 if ~isempty(Data_Stage4_Rejected)
     writecell(titles,output_filename,'Sheet','Rejected at Middle Stage','Range','A1');
-    writematrix(FormatDataForExport(Data_Stage4_Rejected),'Sheet','Rejected at Middle Stage','Range','A2');
+    writematrix(FormatDataForExport(Data_Stage4_Rejected),output_filename,'Sheet','Rejected at Middle Stage','Range','A2');
 else
     writecell({'No formulas were rejected with the isotope filter and/or KMD'},output_filename,'Sheet','Rejected at Middle Stage','Range','A1');
 end
