@@ -82,8 +82,8 @@ Stats_TitlesColumns={'Total Peaks','CHO #','CHON #','CHO+CHON #','CHOS #','CHOP 
     'Sulfonic Acid num%','Amino Sugar num%','Sugar num%','Protein num%','Fatty Acid num%','Lipid num%','Unsaturates num%','Cl num%','Extra num%','BC int%','SCA int%',...
     'Lignin int%','Tannin int%','Sulfonic Acid int%','Amino Sugar int%','Sugar int%','Protein int%','Fatty Acid int%','Lipid int%','Unsaturates int%','Cl int%','Extra int%'};
 
-xlswrite('FTMS CompoundClass Master Report.xlsx',Stats_TitlesColumns,1,'B1')
-xlswrite('FTMS CompoundClass Master Report.xlsx',stats,1,'A2')
+writecell(Stats_TitlesColumns, 'FTMS CompoundClass Master Report.xlsx', 'Sheet', 'Sheet1', 'Range', 'B1')
+writematrix(stats, 'FTMS CompoundClass Master Report.xlsx', 'Sheet', 'Sheet1', 'Range', 'A2')
 
 disp('Automated classification with FTMS_CompoundClass - Complete!')
 
@@ -106,22 +106,21 @@ for i=1:size(Files,1)
 end
 
 % Export Data
-warning('off','MATLAB:xlswrite:AddSheet')
 titleAVGs={'C' 'H' 'O' 'N' 'S' 'P' 'E' 'O/C' 'H/C' 'N/C' 'E/C' 'H/N' 'O/N' 'H/S' 'H/P' 'O/S' 'O/P' 'N/S' 'P/S' 'H/E' 'O/E' 'N/E' 'ExactMass' 'DBE' 'DBE/C' 'DBE/H' 'DBE/O' 'DBE-O' 'AImod' 'Ring' 'NOSC'};
 titleAVGsw={'Cw' 'Hw' 'Ow' 'Nw' 'Sw' 'P' 'Ew' 'O/Cw' 'H/Cw' 'N/Cw' 'E/Cw' 'H/Nw' 'O/Nw' 'H/Sw' 'H/Pw' 'O/Sw' 'O/Pw' 'N/Sw' 'P/Sw' 'H/Ew' 'O/Ew' 'N/Ew' 'ExactMassw' 'DBEw' 'DBE/Cw' 'DBE/Hw' 'DBE/Ow' 'DBE-Ow' 'AImodw' 'Ringw' 'NOSCw'};
-
 Files_final_Filenames={Files.name}';
-xlswrite('FTMS Metrics Master Report.xlsx',Files_final_Filenames,1,'A2')
-xlswrite('FTMS Metrics Master Report.xlsx',Matrix_AVGs,1,'B2')
-xlswrite('FTMS Metrics Master Report.xlsx',titleAVGs,1,'B1')
 
-xlswrite('FTMS Metrics Master Report.xlsx',Files_final_Filenames,'STDEV','A2')
-xlswrite('FTMS Metrics Master Report.xlsx',Matrix_STDs,'STDEV','B2')
-xlswrite('FTMS Metrics Master Report.xlsx',titleAVGs,'STDEV','B1')
+writecell(Files_final_Filenames, 'FTMS Metrics Master Report.xlsx', 'Sheet', 'Sheet 1', 'Range', 'A2')
+writematrix(Matrix_AVGs, 'FTMS Metrics Master Report.xlsx', 'Sheet', 'Sheet 1', 'Range', 'B2')
+writecell(titleAVGs, 'FTMS Metrics Master Report.xlsx', 'Sheet', 'Sheet 1', 'Range', 'B1')
 
-xlswrite('FTMS Metrics Master Report.xlsx',Files_final_Filenames,'Metrics Weighed','A2')
-xlswrite('FTMS Metrics Master Report.xlsx',Matrix_AVGsw,'Metrics Weighed','B2')
-xlswrite('FTMS Metrics Master Report.xlsx',titleAVGsw,'Metrics Weighed','B1')
+writecell(Files_final_Filenames, 'FTMS Metrics Master Report.xlsx', 'Sheet', 'STDEV', 'Range', 'A2')
+writematrix(Matrix_STDs, 'FTMS Metrics Master Report.xlsx', 'Sheet', 'STDEV', 'Range', 'B2')
+writecell(titleAVGs, 'FTMS Metrics Master Report.xlsx', 'Sheet', 'STDEV', 'Range', 'B1')
+
+writecell(Files_final_Filenames, 'FTMS Metrics Master Report.xlsx', 'Sheet', 'Metrics Weighed', 'Range', 'A2')
+writematrix(Matrix_AVGsw, 'FTMS Metrics Master Report.xlsx', 'Sheet', 'Metrics Weighed', 'Range', 'B2')
+writecell(titleAVGsw, 'FTMS Metrics Master Report.xlsx', 'Sheet', 'Metrics Weighed', 'Range', 'B1')
 
 disp('Automated metrics computation - Complete!')
 
