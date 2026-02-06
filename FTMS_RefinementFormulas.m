@@ -755,7 +755,7 @@ writecell(titles,output_filename,'Sheet','Final Refinement','Range','A1');
 writematrix(FormatDataForExport(Data_Stage7_Refined),output_filename,'Sheet','Final Refinement','Range','A2');
 
 writecell(titles,[filename(1:end-17) '_Final.xlsx'],'Sheet','Sheet1','Range','A1');
-writematrix(FormatDataForExport(Data_Stage7_Refined),output_filename,'Sheet','Sheet1','Range','A2');
+writematrix(FormatDataForExport(Data_Stage7_Refined),[filename(1:end-17) '_Final.xlsx'],'Sheet','Sheet1','Range','A2');
     
 %% Stage 8: Quality Control
 clearvars -except filename config format titles RefinementData RefinementQC Data_Stage7_Refined Unassigned output_filename
