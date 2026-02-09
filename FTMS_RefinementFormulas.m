@@ -763,10 +763,12 @@ clearvars -except filename config format titles RefinementData RefinementQC Data
 figure 
 set(gcf,'color',[0.85 0.85 0.85]);
 set(gcf,'WindowState','maximized')
+set(gcf, 'Position', [100, 100, 1600, 900]); % [left, bottom, width, height] in pixels
+
     subplot(2,3,[1,4]) %vK evaluating S/N
         hold on
-        title('Van Krevelen Diagram');
-        xlabel('O/C'); ylabel('H/C');
+        title('Van Krevelen Diagram', 'FontSize', 14);
+        xlabel('O/C', 'FontSize', 12); ylabel('H/C', 'FontSize', 12);
         xlim([0 1.2]); ylim([0 2.5]);
         figure_matrix=[Data_Stage7_Refined(:,format.Column_OC),Data_Stage7_Refined(:,format.Column_HC),Data_Stage7_Refined(:,format.Column_SN)];
         figure_matrix=sortrows(figure_matrix,3,'descend');
@@ -781,33 +783,36 @@ set(gcf,'WindowState','maximized')
         h3=refline(-0.3740,0.7551); % AImod=0.67
         h1.Color='k';h2.Color='k';h3.Color='k';
         h1.LineWidth=1.5;h2.LineWidth=1.5;h3.LineWidth=1.5;
-        set(gca,'fontweight','bold')
+        set(gca,'fontweight','bold', 'FontSize', 11)
         hold off
+        
     subplot(2,3,2) % Histogram for S/N 
         hold on
-        title('Histogram S/N');
-        xlabel('S/N'); ylabel('Number of Formulas');
+        xlabel('S/N', 'FontSize', 12); ylabel('Number of Formulas', 'FontSize', 12);
         histfit(Data_Stage7_Refined(:,format.Column_SN),150);
         dist1=fitdist(Data_Stage7_Refined(:,format.Column_SN),'Normal');
         if dist1.sigma ~=0
-            title(['Histogram Signal-to-Noise (' num2str(dist1.mu) ' ± ' num2str(dist1.sigma) ')']);
+            title(['Histogram Signal-to-Noise (' num2str(dist1.mu) ' ± ' num2str(dist1.sigma) ')'], 'FontSize', 12);
         else
-            title('Histogram Signal-to-Noise (N/A)');
+            title('Histogram Signal-to-Noise (N/A)', 'FontSize', 12);
         end
         xlim([-50 300])
-        set(gca,'fontweight','bold')
+        set(gca,'fontweight','bold', 'FontSize', 11)
         hold off
+        
     subplot(2,3,5) % Histogram for Assignment Errors
         hold on
-        xlabel('Assignment Error (ppm)'); ylabel('Number of Formulas');
+        xlabel('Assignment Error (ppm)', 'FontSize', 12); ylabel('Number of Formulas', 'FontSize', 12);
         histfit(Data_Stage7_Refined(:,format.Column_error),21);
         dist2=fitdist(Data_Stage7_Refined(:,format.Column_error),'Normal');
-        title(['Histogram Assignment Error (' num2str(round(dist2.mu,4)) ' ± ' num2str(round(dist2.sigma,4)) ' ppm) ']);
-        set(gca,'fontweight','bold')
+        title(['Histogram Assignment Error (' num2str(round(dist2.mu,4)) ' ± ' num2str(round(dist2.sigma,4)) ' ppm) '], 'FontSize', 12);
+        set(gca,'fontweight','bold', 'FontSize', 11)
         hold off
+        
     subplot(2,3,3) % Evaluation of C-numbers
         hold on
-        xlabel('Estimated C-number from ^{13}C/^{12}C ratio'); ylabel('Assigned C-number');
+        xlabel('Estimated C-number from ^{13}C/^{12}C ratio', 'FontSize', 12); 
+        ylabel('Assigned C-number', 'FontSize', 12);
         Cnumbers=[Data_Stage7_Refined(:,format.Column_EstimC),Data_Stage7_Refined(:,format.Column_C)];
         Cnumbers(Cnumbers == 0) = NaN;
         Cnumbers(any(isnan(Cnumbers), 2), :) = [];
@@ -818,87 +823,81 @@ set(gcf,'WindowState','maximized')
         plot([min([xlim ylim]) max([xlim ylim])], [min([xlim ylim]) max([xlim ylim])], '-r','LineWidth',3); % 1:1 line
         h4=refline(linefit(1),linefit(2));
         set(h4,'LineWidth',3,'Color','k','LineStyle','--') % Linear Fit
-        title(['C Assessment (m = ' num2str(round(linefit(1),3)) ', b = ' num2str(round(linefit(2),3)) ', R^2 = ' num2str(round(Rsq,3)) ')']);
-        legend({'C numbers','One-to-One Line','Linear Fit'},'Location','southeast')
-        set(gca,'fontweight','bold')
+        title(['C Assessment (m = ' num2str(round(linefit(1),3)) ', b = ' num2str(round(linefit(2),3)) ', R^2 = ' num2str(round(Rsq,3)) ')'], 'FontSize', 12);
+        legend({'C numbers','One-to-One Line','Linear Fit'},'Location','southeast', 'FontSize', 10)
+        set(gca,'fontweight','bold', 'FontSize', 11)
         hold off
+        
     subplot(2,3,6) % Table with stats for the processing
+        ax = gca;
         hold on
-        ylim([0 1.4]); xlim([0 1]);
+        ylim([0 1.4]); xlim([0 1.05]);
         set(gca,'YTickLabel',[],'XTickLabel',[],'XColor','none','YColor','none');
-        text(0.01,1.25,'Number of Peaks','FontWeight','bold','FontSize',12)
-        text(0.01,1.15,'Blank Peaks','FontWeight','bold','FontSize',12)
-        text(0.01,1.05,'Salt Peaks','FontWeight','bold','FontSize',12)
-        text(0.01,0.95,'Doubly Charged Peaks','FontWeight','bold','FontSize',12)
-        text(0.01,0.85,'^{13}C Peaks','FontWeight','bold','FontSize',12)
-        text(0.01,0.75,'^{34}S Peaks','FontWeight','bold','FontSize',12)
-        text(0.01,0.65,'^{54}Fe Peaks','FontWeight','bold','FontSize',12)
-        text(0.01,0.55,'^{37}Cl Peaks','FontWeight','bold','FontSize',12)
-        text(0.01,0.45,'^{200}Hg Peaks','FontWeight','bold','FontSize',12)
-        text(0.01,0.35,'Rejected Peaks','FontWeight','bold','FontSize',12)
-        text(0.01,0.25,'Refined Peaks','FontWeight','bold','FontSize',12)
-        text(0.01,0.15,'Unassignable Peaks','FontWeight','bold','FontSize',12)
         
-        text(0.4646,1.35,'# of peaks   % Num  % Magn','FontWeight','bold','FontSize',12)
-        annotation('line',[0.7876 0.7876],[0.4255 0.12],'LineWidth',2);
-        annotation('line',[0.8362 0.8362],[0.4255 0.12],'LineWidth',2);
-        annotation('line',[0.8709 0.8709],[0.4255 0.12],'LineWidth',2);
-        annotation('line',[0.7876 0.9035],[0.4255 0.4255],'LineWidth',2);
+        row_spacing = 0.082;
+        start_y = 1.28;
         
-        text(0.5173,1.25,num2str(RefinementQC(1,1)),'FontSize',12); % Number of formulas
-        text(0.5173,1.15,num2str(RefinementQC(2,1)),'FontSize',12);
-        text(0.5173,1.05,num2str(RefinementQC(3,1)),'FontSize',12);
-        text(0.5173,0.95,num2str(RefinementQC(4,1)),'FontSize',12);
-        text(0.5173,0.85,num2str(RefinementQC(5,1)),'FontSize',12);
-        text(0.5173,0.75,num2str(RefinementQC(6,1)),'FontSize',12);
-        text(0.5173,0.65,num2str(RefinementQC(7,1)),'FontSize',12);
-        text(0.5173,0.55,num2str(RefinementQC(8,1)),'FontSize',12);
-        text(0.5173,0.45,num2str(RefinementQC(9,1)),'FontSize',12);
-        text(0.5173,0.35,num2str(RefinementQC(10,1)),'FontSize',12);
-        text(0.5173,0.25,num2str(RefinementQC(11,1)),'FontSize',12);
-        text(0.5173,0.15,num2str(size(Unassigned,1)),'FontSize',12);
+        col1_x = 0.02;
+        col2_x = 0.53;
+        col3_x = 0.74;
+        col4_x = 0.90;
         
-        text(0.7124,1.25,num2str(round(RefinementQC(1,2),2)),'FontSize',12); % Percentages, number-based
-        text(0.7124,1.15,num2str(round(RefinementQC(2,2),2)),'FontSize',12);
-        text(0.7124,1.05,num2str(round(RefinementQC(3,2),2)),'FontSize',12);
-        text(0.7124,0.95,num2str(round(RefinementQC(4,2),2)),'FontSize',12);
-        text(0.7124,0.85,num2str(round(RefinementQC(5,2),2)),'FontSize',12);
-        text(0.7124,0.75,num2str(round(RefinementQC(6,2),2)),'FontSize',12);
-        text(0.7124,0.65,num2str(round(RefinementQC(7,2),2)),'FontSize',12);
-        text(0.7124,0.55,num2str(round(RefinementQC(8,2),2)),'FontSize',12);
-        text(0.7124,0.45,num2str(round(RefinementQC(9,2),2)),'FontSize',12);
-        text(0.7124,0.35,num2str(round(RefinementQC(10,2),2)),'FontSize',12);
-        text(0.7124,0.25,num2str(round(RefinementQC(11,2),2)),'FontSize',12);
-        text(0.7124,0.15,num2str(round(size(Unassigned,1)*100/RefinementQC(11,1),2)),'FontSize',12);
+        % Header
+        text(col2_x-0.1, start_y+0.07, '# of peaks   % Num  % Magn', 'FontWeight', 'bold', 'FontSize', 11)
         
-        text(0.8831,1.25,num2str(round(RefinementQC(1,3),2)),'FontSize',12); % Percentages, magnitude-based
-        text(0.8831,1.15,num2str(round(RefinementQC(2,3),2)),'FontSize',12);
-        text(0.8831,1.05,num2str(round(RefinementQC(3,3),2)),'FontSize',12);
-        text(0.8831,0.95,num2str(round(RefinementQC(4,3),2)),'FontSize',12);
-        text(0.8831,0.85,num2str(round(RefinementQC(5,3),2)),'FontSize',12);
-        text(0.8831,0.75,num2str(round(RefinementQC(6,3),2)),'FontSize',12);
-        text(0.8831,0.65,num2str(round(RefinementQC(7,3),2)),'FontSize',12);
-        text(0.8831,0.55,num2str(round(RefinementQC(8,3),2)),'FontSize',12);
-        text(0.8831,0.45,num2str(round(RefinementQC(9,3),2)),'FontSize',12);
-        text(0.8831,0.35,num2str(round(RefinementQC(10,3),2)),'FontSize',12);
-        text(0.8831,0.25,num2str(round(RefinementQC(11,3),2)),'FontSize',12);
-        text(0.8831,0.15,num2str(round(sum(Unassigned(:,2))*100/sum(RefinementData(:,2)),2)),'FontSize',12);
-
-        % Assigned peaks computation
-        if round(size(Data_Stage7_Refined,1)*100/RefinementQC(11,1),2) > 80 || round(sum(Data_Stage7_Refined(:,format.Column_Magnitude))*100/sum(RefinementData(:,2)),2) > 80
-            text(0.01,0.05,'Assigned Peaks','FontWeight','bold','FontSize',12,'Color',[0.25,0.67,0.03])
-            text(0.5173,0.05,num2str(size(Data_Stage7_Refined,1)),'FontWeight','bold','FontSize',12,'Color',[0.25,0.67,0.03]);
-            text(0.7124,0.05,num2str(round(size(Data_Stage7_Refined,1)*100/RefinementQC(11,1),2)),'FontWeight','bold','FontSize',12,'Color',[0.25,0.67,0.03]);
-            text(0.8831,0.05,num2str(round(sum(Data_Stage7_Refined(:,format.Column_Magnitude))*100/sum(RefinementData(:,2)),2)),'FontWeight','bold','FontSize',12,'Color',[0.25,0.67,0.03]);
-        else
-            text(0.01,0.05,'Assigned Peaks','FontWeight','bold','FontSize',12,'Color','r')
-            text(0.5173,0.05,num2str(size(Data_Stage7_Refined,1)),'FontWeight','bold','FontSize',12,'Color','r');
-            text(0.7124,0.05,num2str(round(size(Data_Stage7_Refined,1)*100/RefinementQC(11,1),2)),'FontWeight','bold','FontSize',12,'Color','r');
-            text(0.8831,0.05,num2str(round(sum(Data_Stage7_Refined(:,format.Column_Magnitude))*100/sum(RefinementData(:,2)),2)),'FontWeight','bold','FontSize',12,'Color','r');
+        line_x1 = 0.70;
+        line_x2 = 0.86;
+        line_x3 = 1.02;
+        line_y_top = start_y + 0.02;
+        line_y_bottom = start_y - 13*row_spacing - 0.02;
+        
+        plot([line_x1 line_x1], [line_y_bottom line_y_top], 'k-', 'LineWidth', 1.5);
+        plot([line_x2 line_x2], [line_y_bottom line_y_top], 'k-', 'LineWidth', 1.5);
+        plot([line_x3 line_x3], [line_y_bottom line_y_top], 'k-', 'LineWidth', 1.5);
+        plot([col1_x line_x3], [line_y_top line_y_top], 'k-', 'LineWidth', 1.5);
+        
+        % Row labels and data
+        labels = {'Number of Peaks', 'Blank Peaks', 'Salt Peaks', 'Doubly Charged Peaks', ...
+                  '^{13}C Peaks', '^{34}S Peaks', '^{54}Fe Peaks', '^{37}Cl Peaks', ...
+                  '^{200}Hg Peaks', 'Rejected Peaks', 'Refined Peaks', 'Unassignable Peaks'};
+        
+        for i = 1:length(labels)
+            y_pos = start_y - (i-1)*row_spacing;
+            text(col1_x, y_pos, labels{i}, 'FontWeight', 'bold', 'FontSize', 10)
         end
+        
+        % Data values (first 11 rows from RefinementQC)
+        for i = 1:11
+            y_pos = start_y - i*row_spacing;
+            text(col2_x, y_pos, num2str(RefinementQC(i,1)), 'FontSize', 10);
+            text(col3_x, y_pos, num2str(round(RefinementQC(i,2),2)), 'FontSize', 10);
+            text(col4_x, y_pos, num2str(round(RefinementQC(i,3),2)), 'FontSize', 10);
+        end
+        
+        % Unassignable peaks row (12th row)
+        y_pos = start_y - 12*row_spacing;
+        text(col2_x, y_pos, num2str(size(Unassigned,1)), 'FontSize', 10);
+        text(col3_x, y_pos, num2str(round(size(Unassigned,1)*100/RefinementQC(11,1),2)), 'FontSize', 10);
+        text(col4_x, y_pos, num2str(round(sum(Unassigned(:,2))*100/sum(RefinementData(:,2)),2)), 'FontSize', 10);
+        
+        % Assigned peaks computation (13th row)
+        y_pos = start_y - 13*row_spacing;
+        if round(size(Data_Stage7_Refined,1)*100/RefinementQC(11,1),2) > 80 || round(sum(Data_Stage7_Refined(:,format.Column_Magnitude))*100/sum(RefinementData(:,2)),2) > 80
+            text(col1_x, y_pos, 'Assigned Peaks', 'FontWeight', 'bold', 'FontSize', 10, 'Color', [0.25,0.67,0.03])
+            text(col2_x, y_pos, num2str(size(Data_Stage7_Refined,1)), 'FontWeight', 'bold', 'FontSize', 10, 'Color', [0.25,0.67,0.03]);
+            text(col3_x, y_pos, num2str(round(size(Data_Stage7_Refined,1)*100/RefinementQC(11,1),2)), 'FontWeight', 'bold', 'FontSize', 10, 'Color', [0.25,0.67,0.03]);
+            text(col4_x, y_pos, num2str(round(sum(Data_Stage7_Refined(:,format.Column_Magnitude))*100/sum(RefinementData(:,2)),2)), 'FontWeight', 'bold', 'FontSize', 10, 'Color', [0.25,0.67,0.03]);
+        else
+            text(col1_x, y_pos, 'Assigned Peaks', 'FontWeight', 'bold', 'FontSize', 10, 'Color', 'r')
+            text(col2_x, y_pos, num2str(size(Data_Stage7_Refined,1)), 'FontWeight', 'bold', 'FontSize', 10, 'Color', 'r');
+            text(col3_x, y_pos, num2str(round(size(Data_Stage7_Refined,1)*100/RefinementQC(11,1),2)), 'FontWeight', 'bold', 'FontSize', 10, 'Color', 'r');
+            text(col4_x, y_pos, num2str(round(sum(Data_Stage7_Refined(:,format.Column_Magnitude))*100/sum(RefinementData(:,2)),2)), 'FontWeight', 'bold', 'FontSize', 10, 'Color', 'r');
+        end
+        hold off
 print(gcf,['FTMS Processing_' filename(1:end-17)],'-dpng','-r300');
 disp(['Finished refining the formulas of the peak list ' char(filename) ' (' num2str(toc) ' seconds)'])
 end
+
 
 %% Internal functions
 
